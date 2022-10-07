@@ -6,3 +6,5 @@
 /hermes-datavision/.vs/hermes-datavision
 /hermes-datavision/hermes-datavision/bin/Debug/net6.0
 /hermes-datavision/hermes-datavision/obj
+/hermes-datavision/hermes-datavision/appsettings.json
+/hermes-datavision/hermes-datavision/appsettings.Development.json
