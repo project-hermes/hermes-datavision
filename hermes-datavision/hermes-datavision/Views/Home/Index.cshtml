@@ -1,8 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<h1>Remora Datavision</h1> 
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<p>
+    <select>
+        @foreach(var dive in ((List<hermes_datavision.DAL.Remora>)ViewData["dives"]))
+        {
+            <option>@dive.DeviceId - @dive.CreationDate</option>
+        }
+    </select>
+</p>
+
+
+@if(ViewData["chart"] != null)
+{
+    <div><canvas id="remoraChart"></canvas></div>
+
+    ChartJSCore.Models.Chart chart = (ChartJSCore.Models.Chart)ViewData["chart"];
+
+    @section Scripts {
+        <script src="~/lib/Chartjs/chart.min.js"></script>
+        <script>
+            @Html.Raw(chart.CreateChartCode("remoraChart"));
+        </script>
+    }
+}
