@@ -1,6 +1,7 @@
 ﻿using ChartJSCore.Helpers;
 using ChartJSCore.Models;
 using hermes_datavision.DAL;
+using hermes_datavision.Helpers;
 using hermes_datavision.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -25,7 +26,10 @@ namespace hermes_datavision.Controllers
 
             if (remoraId.HasValue)
             {
-                var records = Context.RemoraRecords.Where(r => r.RemoraId == remoraId).ToList();
+                var dive = Context.Remoras.Find(remoraId);
+                ViewData["dive"] = dive;
+
+                var records = Context.RemoraRecords.Where(r => r.RemoraId == remoraId).OrderBy(r => r.CreationDate).ToList();
 
                 Chart chartDepth = new Chart();
                 chartDepth.Type = Enums.ChartType.Line;
@@ -34,7 +38,7 @@ namespace hermes_datavision.Controllers
                 depth.Labels = new List<string>();
                 foreach (var record in records)
                 {
-                    depth.Labels.Add(record.CreationDate.ToString());
+                    depth.Labels.Add(DateConversion.UnixTimeStampToDateTime(dive.StartTime + record.Timestamp).ToString());
                 }
 
                 LineDataset depthDataset = new LineDataset()
@@ -79,7 +83,7 @@ namespace hermes_datavision.Controllers
                 degrees.Labels = new List<string>();
                 foreach (var record in records)
                 {
-                    degrees.Labels.Add(record.CreationDate.ToString());
+                    degrees.Labels.Add(DateConversion.UnixTimeStampToDateTime(dive.StartTime + record.Timestamp).ToString());
                 }
 
                 LineDataset degreesDataset = new LineDataset()

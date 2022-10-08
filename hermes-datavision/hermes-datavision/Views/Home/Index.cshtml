@@ -1,10 +1,14 @@
-﻿<h1>Remora Datavision</h1> 
+﻿@using hermes_datavision.DAL
+@using ChartJSCore.Models
+@using hermes_datavision.Helpers
+
+<h1>Remora Datavision</h1> 
 
 <p>
     <form action="" method="get" class="/Home/Index">
         <select name="remoraId">
             <option></option>
-            @foreach(var dive in ((List<hermes_datavision.DAL.Remora>)ViewData["dives"]))
+            @foreach(var dive in ((List<Remora>)ViewData["dives"]))
             {
                 <option value="@dive.RemoraId">@dive.RemoraId - @dive.CreationDate</option>
             }
@@ -16,15 +20,92 @@
 
 @if(ViewData["chartDepth"] != null && ViewData["chartDegrees"] != null)
 {
+    <h2>Dive</h2>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+            <b>Identifiant de la plongée (DB)</b>:
+          @(((Remora)ViewData["dive"]).RemoraId)
+        </div>
+       </div>
+
+       <div class="row">
+        <div class="col">
+            <b>Synchronisation de la plongée</b>:
+          @(((Remora)ViewData["dive"]).CreationDate)
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+            <b>Identifiant de la plongée (Firmware)</b>:
+          @(((Remora)ViewData["dive"]).DiveId)
+        </div>
+       </div>
+
+       <div class="row">
+        <div class="col">
+           <b> Identifiant du Remora</b>:
+          @(((Remora)ViewData["dive"]).DeviceId)
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+            <b>Mode</b>:
+          @(((Remora)ViewData["dive"]).Mode)
+        </div>
+       </div>
+
+       <div class="row">
+        <div class="col">
+            <b>Fréquence</b>:
+          @(((Remora)ViewData["dive"]).Freq)
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col">
+            <b>Début de la plongée</b>:
+          @(DateConversion.UnixTimeStampToDateTime(((Remora)ViewData["dive"]).StartTime))
+        </div>
+       </div>
+
+       <div class="row">
+        <div class="col">
+           <b> Fin de la plongée</b>:
+          @(DateConversion.UnixTimeStampToDateTime(((Remora)ViewData["dive"]).EndTime))
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+            <b>Géolocatisation du début de la plongée</b>:
+          Longitude: @(((Remora)ViewData["dive"]).StartLng) - Latitude: @(((Remora)ViewData["dive"]).StartLat) - <a target="_blank" href="https://www.google.com/maps?q=@(((Remora)ViewData["dive"]).StartLat.ToString().Replace(',', '.')),@(((Remora)ViewData["dive"]).StartLng.ToString().Replace(',', '.'))">Map</a>
+        </div>
+       </div>
+
+       <div class="row">
+        <div class="col">
+            <b>Géolocatisation du la fin de la plongée</b>:
+          Longitude: @(((Remora)ViewData["dive"]).EndLng) - Latitude: @(((Remora)ViewData["dive"]).EndLat) - <a target="_blank" href="https://www.google.com/maps?q=@(((Remora)ViewData["dive"]).EndLat.ToString().Replace(',', '.')),@(((Remora)ViewData["dive"]).EndLng.ToString().Replace(',', '.'))">Map</a>
+        </div>
+      </div>
+    </div>
+
+    <br /><br />
+
     <h2>Depth</h2>
     <div><canvas id="chartDepth"></canvas></div>
 
-    ChartJSCore.Models.Chart chartDepth = (ChartJSCore.Models.Chart)ViewData["chartDepth"];
+    Chart chartDepth = (Chart)ViewData["chartDepth"];
     
+    <br /><br />
+
     <h2>Degrees</h2>
     <div><canvas id="chartDegrees"></canvas></div>
 
-    ChartJSCore.Models.Chart chartDegrees = (ChartJSCore.Models.Chart)ViewData["chartDegrees"];
+    Chart chartDegrees = (Chart)ViewData["chartDegrees"];
 
     @section Scripts {
         <script src="~/lib/Chartjs/chart.min.js"></script>
