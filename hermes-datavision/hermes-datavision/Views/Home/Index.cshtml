@@ -1,25 +1,36 @@
 ﻿<h1>Remora Datavision</h1> 
 
 <p>
-    <select>
-        @foreach(var dive in ((List<hermes_datavision.DAL.Remora>)ViewData["dives"]))
-        {
-            <option>@dive.DeviceId - @dive.CreationDate</option>
-        }
-    </select>
+    <form action="" method="get" class="/Home/Index">
+        <select name="remoraId">
+            <option></option>
+            @foreach(var dive in ((List<hermes_datavision.DAL.Remora>)ViewData["dives"]))
+            {
+                <option value="@dive.RemoraId">@dive.RemoraId - @dive.CreationDate</option>
+            }
+        </select>
+        <input type="submit" />
+    </form>
 </p>
 
 
-@if(ViewData["chart"] != null)
+@if(ViewData["chartDepth"] != null && ViewData["chartDegrees"] != null)
 {
-    <div><canvas id="remoraChart"></canvas></div>
+    <h2>Depth</h2>
+    <div><canvas id="chartDepth"></canvas></div>
 
-    ChartJSCore.Models.Chart chart = (ChartJSCore.Models.Chart)ViewData["chart"];
+    ChartJSCore.Models.Chart chartDepth = (ChartJSCore.Models.Chart)ViewData["chartDepth"];
+    
+    <h2>Degrees</h2>
+    <div><canvas id="chartDegrees"></canvas></div>
+
+    ChartJSCore.Models.Chart chartDegrees = (ChartJSCore.Models.Chart)ViewData["chartDegrees"];
 
     @section Scripts {
         <script src="~/lib/Chartjs/chart.min.js"></script>
         <script>
-            @Html.Raw(chart.CreateChartCode("remoraChart"));
+            @Html.Raw(chartDepth.CreateChartCode("chartDepth"));
+            @Html.Raw(chartDegrees.CreateChartCode("chartDegrees"));
         </script>
     }
 }

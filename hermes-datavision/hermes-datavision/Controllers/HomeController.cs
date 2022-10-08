@@ -25,26 +25,24 @@ namespace hermes_datavision.Controllers
 
             if (remoraId.HasValue)
             {
-
-                Chart chart = new Chart();
-                chart.Type = Enums.ChartType.Line;
-
                 var records = Context.RemoraRecords.Where(r => r.RemoraId == remoraId).ToList();
-                var data = new Data();
-                data.Labels = new List<string>();
+
+                Chart chartDepth = new Chart();
+                chartDepth.Type = Enums.ChartType.Line;
+
+                var depth = new Data();
+                depth.Labels = new List<string>();
                 foreach (var record in records)
                 {
-                    data.Labels.Add(record.CreationDate.ToString());
+                    depth.Labels.Add(record.CreationDate.ToString());
                 }
 
-                LineDataset dataset = new LineDataset()
+                LineDataset depthDataset = new LineDataset()
                 {
-                    Label = "Degrees",
+                    Label = "Depth",
                     Data = new List<double?>(),
                     Fill = "false",
-                    //LineTension = 0.1,
-                    //BackgroundColor = ChartColor.FromRgba(75, 192, 192, 0.4),
-                    //BorderColor = ChartColor.FromRgb(75, 192, 192),
+                    BorderColor = new List<ChartColor> { ChartColor.FromRgb(54, 162, 235) },
                     BorderCapStyle = "butt",
                     BorderDash = new List<int> { },
                     BorderDashOffset = 0.0,
@@ -63,15 +61,60 @@ namespace hermes_datavision.Controllers
 
                 foreach (var record in records)
                 {
-                    dataset.Data.Add(record.Degrees);
+                    depthDataset.Data.Add(record.Depth);
                 }
 
-                data.Datasets = new List<Dataset>();
-                data.Datasets.Add(dataset);
+                depth.Datasets = new List<Dataset>();
+                depth.Datasets.Add(depthDataset);
 
-                chart.Data = data;
+                chartDepth.Data = depth;
 
-                ViewData["chart"] = chart;
+                ViewData["chartDepth"] = chartDepth;
+
+
+                Chart chartDegrees = new Chart();
+                chartDegrees.Type = Enums.ChartType.Line;
+
+                var degrees = new Data();
+                degrees.Labels = new List<string>();
+                foreach (var record in records)
+                {
+                    degrees.Labels.Add(record.CreationDate.ToString());
+                }
+
+                LineDataset degreesDataset = new LineDataset()
+                {
+                    Label = "Degrees",
+                    Data = new List<double?>(),
+                    Fill = "false",
+                    BorderColor = new List<ChartColor> { ChartColor.FromRgb(75, 192, 192) },
+                    BorderCapStyle = "butt",
+                    BorderDash = new List<int> { },
+                    BorderDashOffset = 0.0,
+                    BorderJoinStyle = "miter",
+                    PointBorderColor = new List<ChartColor> { ChartColor.FromRgb(75, 192, 192) },
+                    PointBackgroundColor = new List<ChartColor> { ChartColor.FromHexString("#ffffff") },
+                    PointBorderWidth = new List<int> { 1 },
+                    PointHoverRadius = new List<int> { 5 },
+                    PointHoverBackgroundColor = new List<ChartColor> { ChartColor.FromRgb(75, 192, 192) },
+                    PointHoverBorderColor = new List<ChartColor> { ChartColor.FromRgb(220, 220, 220) },
+                    PointHoverBorderWidth = new List<int> { 2 },
+                    PointRadius = new List<int> { 1 },
+                    PointHitRadius = new List<int> { 10 },
+                    SpanGaps = false
+                };
+
+                foreach (var record in records)
+                {
+                    degreesDataset.Data.Add(record.Degrees);
+                }
+
+                degrees.Datasets = new List<Dataset>();
+                degrees.Datasets.Add(degreesDataset);
+
+                chartDegrees.Data = degrees;
+
+                ViewData["chartDegrees"] = chartDegrees;
 
             }
 
